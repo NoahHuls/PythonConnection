@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35222.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PythonConnection", "PythonConnection\PythonConnection\PythonConnection.csproj", "{D4A282F6-D430-4880-BC96-5902FF9F6659}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PythonConnection.Client", "PythonConnection\PythonConnection.Client\PythonConnection.Client.csproj", "{6F7F71F6-A83D-481B-9033-37B2A52338E2}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PythonConnection.Python", "PythonConnection.Python\PythonConnection.Python.pyproj", "{DA545D57-297F-44DF-8A2C-16DB08956590}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D4A282F6-D430-4880-BC96-5902FF9F6659}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4A282F6-D430-4880-BC96-5902FF9F6659}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4A282F6-D430-4880-BC96-5902FF9F6659}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4A282F6-D430-4880-BC96-5902FF9F6659}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F7F71F6-A83D-481B-9033-37B2A52338E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F7F71F6-A83D-481B-9033-37B2A52338E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F7F71F6-A83D-481B-9033-37B2A52338E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F7F71F6-A83D-481B-9033-37B2A52338E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA545D57-297F-44DF-8A2C-16DB08956590}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA545D57-297F-44DF-8A2C-16DB08956590}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B73020C2-C734-43F9-ACAB-99CFD60618EF}
+	EndGlobalSection
+EndGlobal

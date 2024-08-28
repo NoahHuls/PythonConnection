@@ -1,0 +1,40 @@
+﻿@page "/python"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+
+@rendermode InteractiveAuto
+
+<PageTitle>Python</PageTitle>
+
+<h3>Python</h3>
+@if (fromPython > 0)
+{
+    <p>Random nr from Python: @fromPython</p>
+}
+<button class="btn btn-primary" @onclick="CallPythonMethod">Click me</button>
+
+@code {
+    private int fromPython;
+    private string errorMessage = string.Empty;
+
+    private async Task CallPythonMethod()
+    {
+        try
+        {
+            var response = await Http.GetFromJsonAsync<PythonResponse>("http://localhost:5000/api/hello-world");
+            fromPython = response!.random_number;
+            errorMessage = string.Empty; // Clear any previous error messages
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error: {ex.Message}";
+        }
+    }
+
+    public sealed class PythonResponse
+    {
+        public string message { get; set; } = string.Empty;
+        public int random_number { get; set; }
+    }
+}
