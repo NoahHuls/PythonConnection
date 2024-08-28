@@ -8,7 +8,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5000/") });
+// Register HttpClient for server-side usage
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
@@ -23,7 +24,7 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-    
+
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();

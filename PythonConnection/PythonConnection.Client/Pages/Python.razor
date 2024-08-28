@@ -1,9 +1,12 @@
 ﻿@page "/python"
 @using System.Net.Http
 @using System.Net.Http.Json
-@inject HttpClient Http
 
-@rendermode InteractiveAuto
+@inject HttpClient Http
+@inject IJSRuntime JS
+
+@rendermode InteractiveServer
+
 
 <PageTitle>Python</PageTitle>
 
@@ -14,9 +17,26 @@
 }
 <button class="btn btn-primary" @onclick="CallPythonMethod">Click me</button>
 
+<br />
+<br />
+
+<canvas id="drawCanvas" width="28" height="28" style="border: 1px solid black; image-rendering: pixelated; width: 280px; height: 280px;"></canvas>
+<br />
+<button @onclick="ClearCanvas">Clear</button>
+<button @onclick="GetPixelData">Get Pixel Data</button>
+
 @code {
     private int fromPython;
     private string errorMessage = string.Empty;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("addCanvasListeners");
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
 
     private async Task CallPythonMethod()
     {
@@ -30,6 +50,18 @@
         {
             errorMessage = $"Error: {ex.Message}";
         }
+    }
+
+    private async Task ClearCanvas()
+    {
+        await JS.InvokeVoidAsync("clearCanvas");
+    }
+
+    private async Task GetPixelData()
+    {
+        var pixelData = await JS.InvokeAsync<int[]>("getPixelData");
+        Console.WriteLine($"Pixel Data: {string.Join(",", pixelData)}");
+        // Further processing of pixel data can be done here
     }
 
     public sealed class PythonResponse
