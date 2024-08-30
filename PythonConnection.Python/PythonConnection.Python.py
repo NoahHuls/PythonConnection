@@ -11,7 +11,8 @@ class Prediction:
 
 @app.route('/api/predict/number', methods=['POST'])
 def predict_number():
-    data = request.get_json()
+    data = request.get_json()['image']
+    print(data)
 
     model = model_runtime.ModelRuntime()
     prediction_result = Prediction(prediction=model.predict(data))
