@@ -13,7 +13,7 @@ def predict_number():
 
     model = model_runtime.ModelRuntime()
     prediction_result = Prediction(prediction=model.predict(data))
-    print(prediction_result)
+    print(prediction_result.__dict__)
 
     return jsonify(message="Prediction:", data=prediction_result.__dict__)
 

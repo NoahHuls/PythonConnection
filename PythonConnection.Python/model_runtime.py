@@ -8,6 +8,7 @@ class ModelRuntime:
 
     def predict(self, x):
         x = np.array(x).reshape(-1, 28, 28, 1)
+        x = x / 255.0
         prediction = self.model.predict(x).argmax(axis= -1)
         return int(prediction[0])
 
