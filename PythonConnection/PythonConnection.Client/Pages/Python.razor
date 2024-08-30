@@ -8,32 +8,40 @@
 
 @rendermode InteractiveServer
 
-<PageTitle>Python</PageTitle>
+<PageTitle>Number predicting</PageTitle>
 
 <h3>Python</h3>
-@if (!string.IsNullOrEmpty(errorMessage))
-{
-    <p>@errorMessage</p>
-}
-@if (prediction is not null && prediction != 999)
-{
-    <p>Looks like you’ve drawn a @prediction</p>
-}
-else if (prediction == 999)
-{
-    <p>Looks like you’ve drawn a... well, let’s just call it 'creative expression'.</p>
-}
-<button class="btn btn-primary" @onclick="CallPythonMethod">Click me</button>
-
-<br />
-<br />
-
+<div class="pb-1">
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <p>@errorMessage</p>
+    }
+    @if (isPredicting)
+    {
+        <p>Predicting...</p>
+    }
+    else if (prediction is not null && prediction != 999)
+    {
+        <p>Looks like you’ve drawn a @prediction</p>
+    }
+    else if (prediction == 999)
+    {
+        <p>Looks like you’ve drawn a... well, let’s just call it 'creative expression'.</p>
+    }
+    else
+    {
+        <p>Draw a number and click 'predict' to see if the model can predict correctly</p>
+    }
+</div>
 <canvas id="drawCanvas" width="28" height="28" style="border: 1px solid black; image-rendering: pixelated; width: 280px; height: 280px;"></canvas>
-<br />
-<button @onclick="ClearCanvas">Clear</button>
+<div style="display: flex; max-width: 280px; justify-content: space-between;">
+    <button class="btn btn-danger" @onclick="ClearCanvas">Clear</button>
+    <button class="btn btn-primary" @onclick="CallPythonMethod">Predict</button>
+</div>
 
 @code {
     private int? prediction;
+    private bool isPredicting;
     private string errorMessage = string.Empty;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -48,6 +56,7 @@ else if (prediction == 999)
     private async Task CallPythonMethod()
     {
         prediction = null;
+        isPredicting = true;
 
         try
         {
@@ -61,10 +70,15 @@ else if (prediction == 999)
         {
             errorMessage = $"Error: {ex.Message}";
         }
+        finally
+        {
+            isPredicting = false;
+        }
     }
 
     private async Task ClearCanvas()
     {
+        prediction = null;
         await JS.InvokeVoidAsync("clearCanvas");
     }
 
