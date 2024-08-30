@@ -7,9 +7,9 @@ class ModelRuntime:
         #self.dickModel = load_model('model.h5')
 
     def predict(self, x):
-        x = np.array(x)
+        x = np.array(x).reshape(-1, 28, 28, 1)
         prediction = self.model.predict(x).argmax(axis= -1)
-        return prediction
+        return int(prediction[0])
 
     def dCheck(self, x):
         #x = np.array(x).reshape(-1, 28, 28, 1)

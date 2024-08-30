@@ -11,7 +11,11 @@
 <PageTitle>Python</PageTitle>
 
 <h3>Python</h3>
-@if (prediction > 0)
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p>@errorMessage</p>
+}
+@if (prediction is not null)
 {
     <p>Prediction from python: @prediction</p>
 }
@@ -25,7 +29,7 @@
 <button @onclick="ClearCanvas">Clear</button>
 
 @code {
-    private int prediction;
+    private int? prediction;
     private string errorMessage = string.Empty;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -39,6 +43,8 @@
 
     private async Task CallPythonMethod()
     {
+        prediction = null;
+
         try
         {
             int[] pixelData = await GetPixelData();
