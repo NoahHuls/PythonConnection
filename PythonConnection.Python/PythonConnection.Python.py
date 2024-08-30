@@ -3,10 +3,19 @@ import model_runtime
 
 app = Flask(__name__)
 
-@app.route('/api/hello-world', methods=['GET'])
-def hello_world_with_random():
-    random_number = random.randint(1, 100)
-    return jsonify(message="Hello, World!", random_number=random_number)
+class Prediction:
+    def __init__(self, prediction):
+        self.prediction = prediction
+
+@app.route('/api/predict/number', methods=['POST'])
+def predict_number():
+    data = request.get_json()['image']
+    print(data)
+
+    model = model_runtime.ModelRuntime()
+    prediction_result = Prediction(prediction=model.predict(data))
+
+    return jsonify(message="Prediction:", data=prediction_result.__dict__)
 
 if __name__ == '__main__':
     app.run(debug=True)

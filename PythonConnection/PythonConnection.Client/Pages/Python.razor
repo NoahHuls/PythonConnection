@@ -1,19 +1,19 @@
 ﻿@page "/python"
 @using System.Net.Http
 @using System.Net.Http.Json
+@using System.Text.Json
 
 @inject HttpClient Http
 @inject IJSRuntime JS
 
 @rendermode InteractiveServer
 
-
 <PageTitle>Python</PageTitle>
 
 <h3>Python</h3>
-@if (fromPython > 0)
+@if (prediction > 0)
 {
-    <p>Random nr from Python: @fromPython</p>
+    <p>Prediction from python: @prediction</p>
 }
 <button class="btn btn-primary" @onclick="CallPythonMethod">Click me</button>
 
@@ -23,10 +23,9 @@
 <canvas id="drawCanvas" width="28" height="28" style="border: 1px solid black; image-rendering: pixelated; width: 280px; height: 280px;"></canvas>
 <br />
 <button @onclick="ClearCanvas">Clear</button>
-<button @onclick="GetPixelData">Get Pixel Data</button>
 
 @code {
-    private int fromPython;
+    private int prediction;
     private string errorMessage = string.Empty;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -42,9 +41,11 @@
     {
         try
         {
-            var response = await Http.GetFromJsonAsync<PythonResponse>("http://localhost:5000/api/hello-world");
-            fromPython = response!.random_number;
-            errorMessage = string.Empty; // Clear any previous error messages
+            int[] pixelData = await GetPixelData();
+            PredictionPayload payload = new PredictionPayload { image = pixelData };
+            HttpResponseMessage responseMessage = await Http.PostAsJsonAsync("http://localhost:5000/api/predict/number", payload);
+            var response = await responseMessage.Content.ReadFromJsonAsync<PythonResponse>();
+            prediction = response!.GetValue();
         }
         catch (Exception ex)
         {
@@ -57,16 +58,35 @@
         await JS.InvokeVoidAsync("clearCanvas");
     }
 
-    private async Task GetPixelData()
+    private async Task<int[]> GetPixelData()
     {
         var pixelData = await JS.InvokeAsync<int[]>("getPixelData");
         Console.WriteLine($"Pixel Data: {string.Join(",", pixelData)}");
-        // Further processing of pixel data can be done here
+        return pixelData;
+    }
+
+    public sealed class PredictionPayload
+    {
+        public int[] image { get; set; } = [];
     }
 
     public sealed class PythonResponse
     {
         public string message { get; set; } = string.Empty;
-        public int random_number { get; set; }
+        public object data { get; set; } = new();
+
+        public int GetValue()
+        {
+            using (JsonDocument document = JsonDocument.Parse(data.ToString()))
+            {
+                // Access the root element (which is an object)
+                JsonElement root = document.RootElement;
+
+                // Get the value of the "number" property
+                int numberFromJson = root.GetProperty("prediction").GetInt32();
+
+                return numberFromJson;
+            }
+        }
     }
 }
