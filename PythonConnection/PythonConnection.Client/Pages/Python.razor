@@ -15,9 +15,13 @@
 {
     <p>@errorMessage</p>
 }
-@if (prediction is not null)
+@if (prediction is not null && prediction != 999)
 {
-    <p>Prediction from python: @prediction</p>
+    <p>Looks like you’ve drawn a @prediction</p>
+}
+else if (prediction == 999)
+{
+    <p>Looks like you’ve drawn a... well, let’s just call it 'creative expression'.</p>
 }
 <button class="btn btn-primary" @onclick="CallPythonMethod">Click me</button>
 

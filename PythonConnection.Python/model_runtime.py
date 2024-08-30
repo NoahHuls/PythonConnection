@@ -11,7 +11,7 @@ class ModelRuntime:
         prediction = self.model.predict(x).argmax(axis= -1)
         return int(prediction[0])
 
-    def dCheck(self, x):
+    def ttpCheck(self, x):
         #x = np.array(x).reshape(-1, 28, 28, 1)
         #prediction = self.dickModel.predict(x).argmax(axis= -1)
         #return prediction.argmax(axis= -1)

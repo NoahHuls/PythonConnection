@@ -27,11 +27,27 @@ window.addCanvasListeners = function () {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     let drawing = false;
+    let lastX, lastY;
 
-    canvas.addEventListener('mousedown', () => drawing = true);
-    canvas.addEventListener('mouseup', () => drawing = false);
-    canvas.addEventListener('mousemove', function (event) {
+    canvas.addEventListener('mousedown', (event) => {
+        drawing = true;
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        lastX = Math.floor((event.clientX - rect.left) * scaleX);
+        lastY = Math.floor((event.clientY - rect.top) * scaleY);
+    });
+
+    canvas.addEventListener('mouseup', () => {
+        drawing = false;
+        lastX = undefined;
+        lastY = undefined;
+    });
+
+    canvas.addEventListener('mousemove', (event) => {
         if (!drawing) return;
+
         const rect = canvas.getBoundingClientRect();
         const scaleX = canvas.width / rect.width;
         const scaleY = canvas.height / rect.height;
@@ -39,7 +55,16 @@ window.addCanvasListeners = function () {
         const x = Math.floor((event.clientX - rect.left) * scaleX);
         const y = Math.floor((event.clientY - rect.top) * scaleY);
 
-        ctx.fillStyle = 'white'; // Draw in white
-        ctx.fillRect(x, y, 1, 1); // Draw a 1x1 pixel
+        if (lastX !== undefined && lastY !== undefined) {
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);  // Move to the last position
+            ctx.lineTo(x, y);          // Draw a line to the current position
+            ctx.strokeStyle = 'white'; // Set the stroke color to white
+            ctx.lineWidth = 2;         // Set the line width
+            ctx.stroke();              // Apply the stroke
+        }
+
+        lastX = x;
+        lastY = y;
     });
 };

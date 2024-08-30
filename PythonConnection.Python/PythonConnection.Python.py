@@ -12,7 +12,11 @@ def predict_number():
     data = request.get_json()['image']
 
     model = model_runtime.ModelRuntime()
-    prediction_result = Prediction(prediction=model.predict(data))
+    if not model.ttpCheck(data):
+        prediction_result = Prediction(model.predict(data))
+    else:
+        prediction_result = Prediction(999)
+
     print(prediction_result)
 
     return jsonify(message="Prediction:", data=prediction_result.__dict__)
