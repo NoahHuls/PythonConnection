@@ -1,4 +1,3 @@
-from _pytest.config import console_main
 from flask import Flask, request, jsonify
 import model_runtime
 
