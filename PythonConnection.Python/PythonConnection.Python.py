@@ -1,4 +1,3 @@
-# Install Flask if you haven't already: pip install flask
 from flask import Flask, jsonify
 import random
 
