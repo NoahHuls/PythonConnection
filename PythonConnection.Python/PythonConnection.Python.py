@@ -1,5 +1,7 @@
+from turtle import mode
 from _pytest.config import console_main
 from flask import Flask, request, jsonify
+import model_runtime
 
 app = Flask(__name__)
 
@@ -10,9 +12,9 @@ class Prediction:
 @app.route('/api/predict/number', methods=['POST'])
 def predict_number():
     data = request.get_json()
-    print(data)
 
-    prediction_result = Prediction(prediction=999)
+    model = model_runtime.ModelRuntime()
+    prediction_result = Prediction(prediction=model.predict(data))
 
     return jsonify(message="Prediction:", data=prediction_result.__dict__)
 
