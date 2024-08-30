@@ -17,8 +17,6 @@ def predict_number():
     else:
         prediction_result = Prediction(999)
 
-    print(prediction_result)
-
     return jsonify(message="Prediction:", data=prediction_result.__dict__)
 
 if __name__ == '__main__':
